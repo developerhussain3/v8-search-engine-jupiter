@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search with Jupiter</title>
+    <link rel="stylesheet" href="style.css?v=17.0">
+</head>
+<body>
+
+    <!-- Giant 3D Rotating Planet Jupiter Background (Stars in fixed realistic positions, only Jupiter rotates) -->
+    <div class="jupiter-space-background" aria-hidden="true">
+        <svg class="jupiter-real-space-svg" viewBox="0 0 1024 576" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <defs>
+                <!-- Exact Circular Clip for Jupiter sphere: cx=503, cy=285, r=217 -->
+                <clipPath id="realJupiterClip">
+                    <circle cx="503" cy="285" r="217" />
+                </clipPath>
+
+                <!-- 3D Terminator Gradient: Left half in deep shadow, right half vibrant Jupiter cloud colors -->
+                <linearGradient id="realJupiterTerminator" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#000000" stop-opacity="1.0" />
+                    <stop offset="42%" stop-color="#000000" stop-opacity="0.99" />
+                    <stop offset="47%" stop-color="#000000" stop-opacity="0.88" />
+                    <stop offset="52%" stop-color="#000000" stop-opacity="0.45" />
+                    <stop offset="56%" stop-color="#000000" stop-opacity="0.08" />
+                    <stop offset="62%" stop-color="#000000" stop-opacity="0" />
+                    <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+                </linearGradient>
+
+                <!-- 3D Spherical Limb Softening (Never blacks out top and bottom poles) -->
+                <radialGradient id="realJupiterLimbDarkening" cx="62%" cy="50%" r="56%">
+                    <stop offset="85%" stop-color="#000000" stop-opacity="0" />
+                    <stop offset="96%" stop-color="#000000" stop-opacity="0.10" />
+                    <stop offset="100%" stop-color="#000000" stop-opacity="0.22" />
+                </radialGradient>
+            </defs>
+
+            <!-- LAYER 1: The User's Exact Image (Stars Stay in Their Exact Fixed Positions!) -->
+            <image href="jupiter-real.jpg" xlink:href="jupiter-real.jpg" x="0" y="0" width="1024" height="576" />
+
+            <!-- LAYER 2: Rotating Jupiter Surface (Full Jupiter Color Top & Bottom, Zero Black Gaps!) -->
+            <g clip-path="url(#realJupiterClip)">
+                <!-- Continuous Seamless Left-to-Right Rotating Texture Track -->
+                <g class="jupiter-rotate-track">
+                    <animateTransform attributeName="transform" type="translate" from="0 0" to="892 0" dur="40s" repeatCount="indefinite" />
+                    <image href="jupiter-surface-real.png?v=2" xlink:href="jupiter-surface-real.png?v=2" x="-835" y="60" width="892" height="450" preserveAspectRatio="none" />
+                    <image href="jupiter-surface-real.png?v=2" xlink:href="jupiter-surface-real.png?v=2" x="57" y="60" width="892" height="450" preserveAspectRatio="none" />
+                </g>
+
+                <!-- Stationary 3D Day/Night Terminator Shadow -->
+                <rect x="286" y="60" width="450" height="450" fill="url(#realJupiterTerminator)" />
+                <circle cx="503" cy="285" r="217" fill="url(#realJupiterLimbDarkening)" />
+            </g>
+        </svg>
+
+        <div class="jupiter-vignette-overlay"></div>
+    </div>
+
+    <!-- Top Navigation: Search Mode & Add Article -->
+    <div class="top-bar">
+        <div class="mode-toggle-group">
+            <button type="button" class="mode-btn active" id="modeAutoBtn" title="Gemini AI with automatic offline DSA fallback">
+                ⚡ Gemini AI (Auto)
+            </button>
+            <button type="button" class="mode-btn" id="modeOfflineBtn" title="Directly query in-memory CustomLinkedList & SQLite">
+                💾 Offline DSA
+            </button>
+        </div>
+
+        <button type="button" class="btn-add-article" id="openModalBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z" />
+            </svg>
+            Add Article
+        </button>
+    </div>
+
+    <div class="search-wrapper" id="searchWrapper">
+        <!-- 3D Rotating Jupiter Planet Sphere (Left to Right Planetary Spin) -->
+        <div class="jupiter-planet-container" title="Planet Jupiter - 360° Left-to-Right Axial Rotation">
+            <div class="jupiter-3d-sphere"></div>
+            <div class="jupiter-3d-shadow"></div>
+            <div class="jupiter-3d-glow"></div>
+        </div>
+
+        <div class="brand-title">J U P I T E R</div>
+
+        <div class="search-box" id="searchBox">
+            <input 
+                type="text" 
+                class="search-input" 
+                id="searchInput" 
+                placeholder="Search with Jupiter" 
+                autocomplete="off"
+            >
+            <button type="button" class="search-btn" id="searchBtn" aria-label="Search">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Auto Suggestions Dropdown -->
+        <div class="suggestions-dropdown" id="suggestionsDropdown"></div>
+    </div>
+
+    <div id="resultsContainer" style="margin-top: 28px; width: 520px; max-width: 90vw; color: #fff;"></div>
+
+    <!-- Add Offline Article Modal Dialog -->
+    <div class="modal-overlay" id="articleModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div>
+                    <h2 class="modal-title">🪐 Add Offline Article</h2>
+                    <p class="modal-subtitle">Saves to SQLite DB & in-memory Custom Linked List & Trie</p>
+                </div>
+                <button type="button" class="modal-close-btn" id="closeModalBtn" aria-label="Close">&times;</button>
+            </div>
+
+            <form id="addArticleForm">
+                <div class="form-group">
+                    <label for="docTitle">Article Title</label>
+                    <input type="text" id="docTitle" placeholder="e.g. Red-Black Tree Balancing" required autocomplete="off">
+                </div>
+
+                <div class="form-group">
+                    <label for="docDescription">Article Notes / Summary</label>
+                    <textarea id="docDescription" rows="4" placeholder="Enter detailed notes or explanation..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <label for="docScore" style="margin-bottom: 0;">Relevance Score</label>
+                        <span id="scoreValue" style="color: #84e1bc; font-weight: 600; font-size: 0.9rem;">95.0</span>
+                    </div>
+                    <input type="range" id="docScore" min="80.0" max="100.0" step="0.5" value="95.0">
+                </div>
+
+                <div id="modalAlert" class="modal-alert" style="display: none;"></div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-modal-cancel" id="cancelModalBtn">Cancel</button>
+                    <button type="submit" class="btn-modal-save" id="saveArticleBtn">Save to Database</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js?v=13.0"></script>
+</body>
+</html>

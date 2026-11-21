@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 600 300">
+    <defs>
+        <!-- Jupiter Atmospheric Cloud Belts & Zones Gradient -->
+        <linearGradient id="jupiterBands" x1="0" y1="0" x2="0" y2="100%">
+            <stop offset="0%" stop-color="#4a311c"/>
+            <stop offset="6%" stop-color="#694627"/>
+            <stop offset="12%" stop-color="#8f643e"/>
+            <stop offset="18%" stop-color="#cfad82"/>
+            <stop offset="25%" stop-color="#995123"/>
+            <stop offset="34%" stop-color="#6d2e12"/>
+            <stop offset="42%" stop-color="#cca87a"/>
+            <stop offset="50%" stop-color="#ebd2ab"/>
+            <stop offset="58%" stop-color="#733213"/>
+            <stop offset="68%" stop-color="#96481e"/>
+            <stop offset="77%" stop-color="#c9a57b"/>
+            <stop offset="85%" stop-color="#8a532d"/>
+            <stop offset="93%" stop-color="#613b1f"/>
+            <stop offset="100%" stop-color="#3d2413"/>
+        </linearGradient>
+
+        <!-- Subtle Cloud Texture Overlay -->
+        <linearGradient id="cloudHaze" x1="0" y1="0" x2="100%" y2="0">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.04"/>
+            <stop offset="50%" stop-color="#ffffff" stop-opacity="0.12"/>
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0.04"/>
+        </linearGradient>
+    </defs>
+
+    <!-- Base Atmospheric Gas Bands -->
+    <rect width="600" height="300" fill="url(#jupiterBands)"/>
+
+    <!-- Seamless Atmospheric Jet Stream Waves (Period = 150px, fits 600px perfectly 4 times) -->
+    <!-- North Temperate Storm Stream -->
+    <path d="M0,54 Q37.5,50 75,54 T150,54 T225,54 T300,54 T375,54 T450,54 T525,54 T600,54 L600,64 Q562.5,68 525,64 T450,64 T375,64 T300,64 T225,64 T150,64 T75,64 T0,64 Z" fill="#9e5627" opacity="0.55"/>
+
+    <!-- North Equatorial Belt Jet Stream -->
+    <path d="M0,86 Q37.5,91 75,86 T150,86 T225,86 T300,86 T375,86 T450,86 T525,86 T600,86 L600,98 Q562.5,93 525,98 T450,98 T375,98 T300,98 T225,98 T150,98 T75,98 T0,98 Z" fill="#5c230d" opacity="0.65"/>
+
+    <!-- Equatorial Zone Cloud Billows -->
+    <path d="M0,132 Q37.5,128 75,132 T150,132 T225,132 T300,132 T375,132 T450,132 T525,132 T600,132 L600,144 Q562.5,148 525,144 T450,144 T375,144 T300,144 T225,144 T150,144 T75,144 T0,144 Z" fill="#f0d8b5" opacity="0.45"/>
+
+    <!-- South Equatorial Belt Turbulence -->
+    <path d="M0,172 Q37.5,177 75,172 T150,172 T225,172 T300,172 T375,172 T450,172 T525,172 T600,172 L600,188 Q562.5,183 525,188 T450,188 T375,188 T300,188 T225,188 T150,188 T75,188 T0,188 Z" fill="#6e2d11" opacity="0.7"/>
+
+    <!-- South Temperate Storm Eddies -->
+    <path d="M0,224 Q37.5,220 75,224 T150,224 T225,224 T300,224 T375,224 T450,224 T525,224 T600,224 L600,236 Q562.5,240 525,236 T450,236 T375,236 T300,236 T225,236 T150,236 T75,236 T0,236 Z" fill="#9c5e31" opacity="0.5"/>
+
+    <!-- The Great Red Spot (Authentic 300-year-old Jovian Storm) at x=210 -->
+    <g transform="translate(210, 180)">
+        <ellipse cx="0" cy="0" rx="36" ry="20" fill="#a83916"/>
+        <ellipse cx="0" cy="0" rx="28" ry="15" fill="#cb491f"/>
+        <ellipse cx="-2" cy="-1" rx="18" ry="9" fill="#e5632f"/>
+        <ellipse cx="-3" cy="-1" rx="8" ry="4" fill="#f88957" opacity="0.85"/>
+        <!-- Storm Turbulence Ring -->
+        <path d="M-42,5 Q-30,-20 0,-20 Q30,-20 42,5 Q32,20 0,20 Q-32,20 -42,5 Z" fill="none" stroke="#4d1707" stroke-width="2.2" opacity="0.45"/>
+    </g>
+
+    <!-- Seamless Haze Overlay -->
+    <rect width="600" height="300" fill="url(#cloudHaze)"/>
+</svg>
+

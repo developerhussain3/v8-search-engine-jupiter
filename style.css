@@ -1,0 +1,762 @@
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            min-height: 100dvh;
+            width: 100vw;
+            overflow-x: hidden;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            padding: clamp(20px, 3.5vh, 36px) 20px 80px;
+            background-color: #000000;
+            position: relative;
+        }
+
+        /* ==========================================================================
+           Realistic 3D Rotating Planet Jupiter Background (Fixed Stars, Only Jupiter Rotates)
+           ========================================================================== */
+        .jupiter-space-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            z-index: -1;
+            pointer-events: none;
+            background-color: #000000;
+        }
+
+        .jupiter-real-space-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        /* Continuous Left-to-Right Horizontal Planetary Spin (Only Jupiter Rotates!) */
+        .jupiter-rotate-track {
+            will-change: transform;
+            animation: spinJupiterRealTrack 40s linear infinite;
+        }
+
+        @keyframes spinJupiterRealTrack {
+            0% {
+                transform: translate3d(0, 0, 0);
+            }
+            100% {
+                transform: translate3d(892px, 0, 0); /* Pure Left-to-Right Horizontal Spin */
+            }
+        }
+
+        /* Deep Space Vignette so search bar and results pop cleanly */
+        .jupiter-vignette-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(0, 0, 0, 0.08) 0%, rgba(0, 0, 0, 0.45) 60%, rgba(0, 0, 0, 0.88) 100%);
+            pointer-events: none;
+        }
+
+        .search-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 720px;
+        }
+
+        /* ==========================================================================
+           3D Rotating Jupiter Planet Sphere (Left-to-Right Planetary Spin)
+           ========================================================================== */
+        .jupiter-planet-container {
+            position: relative;
+            width: clamp(72px, 8vw, 90px);
+            height: clamp(72px, 8vw, 90px);
+            margin-bottom: clamp(14px, 2.2vh, 20px);
+            cursor: pointer;
+            filter: drop-shadow(0 0 24px rgba(235, 185, 115, 0.45));
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+            user-select: none;
+        }
+
+        .jupiter-planet-container:hover {
+            transform: scale(1.08);
+            filter: drop-shadow(0 0 35px rgba(235, 185, 115, 0.7));
+        }
+
+        .jupiter-3d-sphere {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-image: url('jupiter-surface.svg');
+            background-repeat: repeat-x;
+            background-size: auto 100%;
+            /* Pure horizontal left-to-right planetary rotation */
+            animation: rotateSurfaceLeftToRight 18s linear infinite;
+            transform: rotate(3.1deg); /* Authentic axial tilt */
+            will-change: background-position;
+        }
+
+        @keyframes rotateSurfaceLeftToRight {
+            0% {
+                background-position: 0px 0;
+            }
+            100% {
+                background-position: 600px 0; /* Moves smoothly from Left to Right */
+            }
+        }
+
+        /* 3D Day/Night Terminator Lighting Shadow */
+        .jupiter-3d-shadow {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            box-shadow: 
+                inset -22px -12px 28px rgba(0, 0, 0, 0.92),
+                inset 8px 8px 18px rgba(255, 235, 195, 0.35);
+            pointer-events: none;
+        }
+
+        .jupiter-3d-glow {
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(235, 185, 115, 0.35);
+            pointer-events: none;
+        }
+
+        /* Fluid, glowing title above the search bar */
+        .brand-title {
+            color: rgba(255, 240, 210, 0.95);
+            font-size: clamp(1.6rem, 3.2vw, 2.6rem);
+            font-weight: 600;
+            letter-spacing: clamp(8px, 1.6vw, 15px);
+            text-transform: uppercase;
+            margin-bottom: clamp(24px, 4vh, 38px);
+            text-shadow: 0 4px 22px rgba(0, 0, 0, 0.95),
+                         0 0 18px rgba(235, 205, 155, 0.28);
+            opacity: 0.92;
+            transition: letter-spacing 1s cubic-bezier(0.25, 1, 0.35, 1), 
+                        opacity 0.9s ease,
+                        transform 1s cubic-bezier(0.25, 1, 0.35, 1);
+            user-select: none;
+            text-align: center;
+        }
+
+        .search-wrapper:hover .brand-title,
+        .search-wrapper:focus-within .brand-title,
+        .search-wrapper.active .brand-title {
+            letter-spacing: clamp(10px, 1.8vw, 18px);
+            opacity: 1;
+            transform: scale(1.02);
+        }
+
+        /* Circular icon state by default */
+        .search-box {
+            position: relative;
+            width: clamp(68px, 6vw, 76px);
+            height: clamp(68px, 6vw, 76px);
+            background: rgba(20, 20, 25, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1.5px solid rgba(235, 205, 155, 0.45);
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            padding: 8px 10px;
+            box-shadow: 0 12px 38px rgba(0, 0, 0, 0.85),
+                        0 0 24px rgba(235, 205, 155, 0.18);
+            transition: width 0.7s cubic-bezier(0.25, 1, 0.35, 1),
+                        border-color 0.6s ease,
+                        box-shadow 0.6s ease,
+                        background 0.6s ease;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        /* Expanded state when active, hovered, or focused */
+        .search-box.active,
+        .search-box:focus-within,
+        .search-box:hover {
+            width: clamp(340px, 75vw, 620px);
+            background: rgba(18, 18, 24, 0.88);
+            border-color: rgba(245, 215, 165, 0.9);
+            box-shadow: 0 16px 50px rgba(0, 0, 0, 0.95),
+                        0 0 32px rgba(245, 215, 165, 0.35);
+        }
+
+        /* Responsive Input field with larger font */
+        .search-input {
+            width: 0;
+            height: 100%;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #ffffff;
+            font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            padding: 0;
+            opacity: 0;
+            transition: width 0.7s cubic-bezier(0.25, 1, 0.35, 1),
+                        opacity 0.5s ease 0.1s,
+                        padding 0.7s ease;
+        }
+
+        .search-input::placeholder {
+            color: rgba(235, 215, 185, 0.65);
+            font-weight: 400;
+            font-size: clamp(1.15rem, 1.7vw, 1.4rem);
+        }
+
+        /* Reveal input when active, focused, or hovered */
+        .search-box.active .search-input,
+        .search-box:focus-within .search-input,
+        .search-box:hover .search-input {
+            width: calc(100% - clamp(52px, 5vw, 62px));
+            opacity: 1;
+            padding: 0 16px 0 20px;
+        }
+
+        /* Search Icon Button */
+        .search-btn {
+            width: clamp(50px, 4.8vw, 58px);
+            height: clamp(50px, 4.8vw, 58px);
+            min-width: clamp(50px, 4.8vw, 58px);
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, rgba(235, 200, 145, 0.28), rgba(180, 140, 90, 0.18));
+            color: #f5deb3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-left: auto;
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.35, 1),
+                        background 0.6s ease,
+                        color 0.5s ease,
+                        box-shadow 0.6s ease;
+        }
+
+        .search-box.active .search-btn,
+        .search-box:focus-within .search-btn,
+        .search-box:hover .search-btn {
+            background: linear-gradient(135deg, #e6c280, #b88b4a);
+            color: #111115;
+            transform: rotate(90deg);
+        }
+
+        .search-btn svg {
+            width: clamp(23px, 2.2vw, 28px);
+            height: clamp(23px, 2.2vw, 28px);
+            stroke-width: 2.3;
+        }
+
+        /* Auto Suggestions Dropdown */
+        .suggestions-dropdown {
+            width: clamp(340px, 75vw, 620px);
+            margin-top: 10px;
+            background: rgba(18, 18, 24, 0.94);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1.5px solid rgba(235, 205, 155, 0.4);
+            border-radius: 18px;
+            box-shadow: 0 16px 45px rgba(0, 0, 0, 0.9),
+                        0 0 24px rgba(235, 205, 155, 0.15);
+            overflow: hidden;
+            display: none;
+            z-index: 100;
+            animation: fadeInSuggestions 0.2s ease-out;
+        }
+
+        @keyframes fadeInSuggestions {
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .suggestion-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: #d8e0e8;
+            font-size: 0.98rem;
+            cursor: pointer;
+            transition: background 0.18s ease, color 0.18s ease, padding-left 0.18s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-item:hover,
+        .suggestion-item.active {
+            background: rgba(235, 205, 155, 0.18);
+            color: #f5deb3;
+            padding-left: 24px;
+        }
+
+        .suggestion-icon {
+            width: 16px;
+            height: 16px;
+            opacity: 0.65;
+            color: #e6c280;
+            flex-shrink: 0;
+        }
+
+        .suggestion-item:hover .suggestion-icon,
+        .suggestion-item.active .suggestion-icon {
+            opacity: 1;
+        }
+
+        .suggestion-text {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .suggestion-match {
+            color: #e6c280;
+            font-weight: 600;
+        }
+
+        /* Mobile Optimization (< 600px) */
+        @media (max-width: 600px) {
+            .top-bar {
+                margin-bottom: 44px;
+                justify-content: center;
+            }
+
+            .brand-title {
+                font-size: 1.45rem;
+                letter-spacing: 6px;
+                margin-bottom: 26px;
+            }
+
+            .search-wrapper.active .brand-title,
+            .search-wrapper:focus-within .brand-title,
+            .search-wrapper:hover .brand-title {
+                letter-spacing: 7px;
+            }
+
+            .search-box {
+                width: 62px;
+                height: 62px;
+                padding: 6px;
+            }
+
+            .search-box.active,
+            .search-box:focus-within,
+            .search-box:hover {
+                width: 90vw;
+            }
+
+            .search-input {
+                font-size: 1.15rem;
+            }
+
+            .search-input::placeholder {
+                font-size: 1.1rem;
+            }
+
+            .search-box.active .search-input,
+            .search-box:focus-within .search-input,
+            .search-box:hover .search-input {
+                padding: 0 12px 0 14px;
+                width: calc(100% - 48px);
+            }
+
+            .search-btn {
+                width: 46px;
+                height: 46px;
+                min-width: 46px;
+            }
+
+            .search-btn svg {
+                width: 22px;
+                height: 22px;
+            }
+
+            .suggestions-dropdown {
+                width: 90vw;
+            }
+
+            .suggestion-item {
+                font-size: 0.92rem;
+                padding: 10px 14px;
+            }
+        }
+
+        /* ==========================================================================
+           Top Bar & Search Mode Switcher & Add Document Button
+           ========================================================================== */
+        .top-bar {
+            width: 100%;
+            max-width: 860px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: clamp(65px, 12vh, 120px);
+            padding: 0 10px;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .mode-toggle-group {
+            display: inline-flex;
+            background: rgba(18, 18, 24, 0.75);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(235, 205, 155, 0.3);
+            border-radius: 30px;
+            padding: 4px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+        }
+
+        .mode-btn {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-size: clamp(0.75rem, 1.1vw, 0.84rem);
+            font-weight: 500;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .mode-btn:hover {
+            color: #f5deb3;
+        }
+
+        .mode-btn.active {
+            background: linear-gradient(135deg, rgba(235, 205, 155, 0.28), rgba(184, 139, 74, 0.38));
+            color: #f5deb3;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(235, 205, 155, 0.45);
+        }
+
+        .btn-add-article {
+            background: linear-gradient(135deg, rgba(235, 205, 155, 0.22), rgba(180, 140, 90, 0.16));
+            border: 1px solid rgba(235, 205, 155, 0.4);
+            color: #f5deb3;
+            padding: 8px 16px;
+            border-radius: 22px;
+            font-size: clamp(0.78rem, 1.1vw, 0.85rem);
+            font-weight: 500;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+        }
+
+        .btn-add-article:hover {
+            background: linear-gradient(135deg, #e6c280, #b88b4a);
+            color: #111115;
+            box-shadow: 0 4px 20px rgba(235, 205, 155, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-add-article svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ==========================================================================
+           Add Offline Article Modal Dialog
+           ========================================================================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(5, 5, 10, 0.82);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            animation: modalFadeIn 0.25s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-card {
+            background: rgba(18, 18, 24, 0.96);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1.5px solid rgba(235, 205, 155, 0.45);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 520px;
+            padding: 28px 30px;
+            box-shadow: 0 24px 65px rgba(0, 0, 0, 0.95),
+                        0 0 35px rgba(235, 205, 155, 0.18);
+            animation: modalPopIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes modalPopIn {
+            from { transform: scale(0.92); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .modal-title {
+            color: #f5deb3;
+            font-size: 1.28rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-subtitle {
+            color: #94a3b8;
+            font-size: 0.82rem;
+            margin-top: 4px;
+        }
+
+        .modal-close-btn {
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.8rem;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0;
+            margin-top: -4px;
+            transition: color 0.2s;
+        }
+
+        .modal-close-btn:hover {
+            color: #ff8585;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            color: #e2e8f0;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea {
+            background: rgba(10, 10, 14, 0.7);
+            border: 1px solid rgba(235, 205, 155, 0.3);
+            border-radius: 12px;
+            padding: 11px 14px;
+            color: #ffffff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group textarea:focus {
+            border-color: rgba(245, 215, 165, 0.9);
+            box-shadow: 0 0 14px rgba(235, 205, 155, 0.25);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            font-family: inherit;
+            line-height: 1.45;
+        }
+
+        .form-group input[type="range"] {
+            accent-color: #e6c280;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .modal-alert {
+            padding: 11px 16px;
+            border-radius: 12px;
+            font-size: 0.86rem;
+            margin-bottom: 16px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        .modal-alert.success {
+            background: rgba(132, 225, 188, 0.16);
+            border: 1px solid rgba(132, 225, 188, 0.45);
+            color: #84e1bc;
+        }
+
+        .modal-alert.error {
+            background: rgba(255, 107, 107, 0.16);
+            border: 1px solid rgba(255, 107, 107, 0.45);
+            color: #ff8585;
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 22px;
+        }
+
+        .btn-modal-cancel {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #cbd5e1;
+            padding: 9px 18px;
+            border-radius: 12px;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-modal-cancel:hover {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+        }
+
+        .btn-modal-save {
+            background: linear-gradient(135deg, #e6c280, #b88b4a);
+            color: #111115;
+            border: none;
+            padding: 9px 22px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 14px rgba(235, 205, 155, 0.3);
+        }
+
+        .btn-modal-save:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(235, 205, 155, 0.45);
+        }
+
+        /* ==========================================================================
+           Merge Sort Results Toolbar & Ranking Badges
+           ========================================================================== */
+        .sort-toolbar {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(18, 18, 24, 0.78);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(235, 205, 155, 0.3);
+            border-radius: 16px;
+            padding: 9px 16px;
+            margin-bottom: 16px;
+            gap: 10px;
+            flex-wrap: wrap;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+        }
+
+        .sort-label {
+            font-size: 0.82rem;
+            color: #b8c4d0;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sort-chips {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .sort-chip {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            color: #cbd5e1;
+            font-size: 0.78rem;
+            font-weight: 500;
+            padding: 5px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.22s ease;
+        }
+
+        .sort-chip:hover {
+            color: #f5deb3;
+            border-color: rgba(235, 205, 155, 0.5);
+            background: rgba(235, 205, 155, 0.12);
+        }
+
+        .sort-chip.active {
+            background: linear-gradient(135deg, rgba(235, 205, 155, 0.28), rgba(184, 139, 74, 0.38));
+            border-color: rgba(235, 205, 155, 0.7);
+            color: #f5deb3;
+            font-weight: 600;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+        }
+
+        .result-meta-badges {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .result-date-badge {
+            font-size: 0.74rem;
+            color: #94a3b8;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 3px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
