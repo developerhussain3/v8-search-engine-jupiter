@@ -1,5 +1,5 @@
 FROM eclipse-temurin:17-jdk
 WORKDIR /app
 COPY . .
-RUN javac JupiterServer.java
-CMD ["java", "JupiterServer"]
+RUN javac -cp ".:*" *.java
+CMD ["java", "-cp", ".:*", "JupiterServer"]
